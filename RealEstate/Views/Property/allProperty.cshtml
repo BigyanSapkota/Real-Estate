@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Entity.ViewModel.PropertyVM>
+
+  
+<style>
+    .property-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+    }
+
+    .property-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .property-image {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+    }
+
+    .property-body {
+    padding: 15px;
+    }
+
+    .property-price {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 500;
+    }
+
+    .property-description {
+    color: #777;
+    font-size: 0.9rem;
+    }
+</style>
+
+
+<div class="container my-5">
+  
+    <h2 class="text-center mb-4 fw-bold" style="font-size: 2rem;">
+        <span style="color: #FF6347;">E</span>
+        <span style="color: #3F72AF;">x</span>
+        <span style="color: #32CD32;">p</span>
+        <span style="color: #FFD700;">l</span>
+        <span style="color: #8A2BE2;">o</span>
+        <span style="color: #FF69B4;">r</span>
+        <span style="color: #20B2AA;">e</span>
+        <span style="color: white">  </span>
+        <span style="color: #DC143C;">P</span>
+        <span style="color: #00BFFF;">r</span>
+        <span style="color: #ADFF2F;">o</span>
+        <span style="color: #FF1493;">p</span>
+        <span style="color: #FFD700;">e</span>
+        <span style="color: #3CB371;">r</span>
+        <span style="color: #8A2BE2;">t</span>
+        <span style="color: #20B2AA;">y</span>
+    </h2>
+
+
+
+    <div class="text-center mb-4">
+        <h5 class="fw-semibold" style="color: #6C63FF;">Make your dream a reality.</h5>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            var modalId = "propertyModal" + item.PropertyId;
+
+            <div class="col-md-6 col-lg-4">
+                <div class="property-card">
+                    <img src="~/uploads/@item.PropertyImage" class="property-image" alt="Property Image">
+                    <div class="property-body">
+                        <h5 class="mb-1">@item.PropertyName</h5>
+                        <div class="property-price mb-2">$@item.PropertyPrice</div>
+
+                        <p class="property-description">
+                            @{
+                                // Get the first 50 words from the description
+                                var description = @item.PropertyDescription ?? string.Empty;
+                                var wordLimit = 20;
+                                var words = description.Split(' ');
+
+                                // Check if description has more than the word limit
+                                var shortenedDescription = words.Length > wordLimit
+                                ? string.Join(" ", words.Take(wordLimit)) + "........."
+                                : string.Join(" ", words);
+                            }
+                            @shortenedDescription
+                        </p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@modalId">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId + 'Label'" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="@modalId + 'Label'">@item.PropertyName</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="~/uploads/@item.PropertyImage" class="img-fluid mb-3" alt="Property Image">
+                            <h6>Type : @item.PropertyType</h6>
+                            <h6>Price: $@item.PropertyPrice</h6>
+                            <h6>Location: @item.PropertyLocation</h6>
+                            <p>@item.PropertyDescription</p>
+                            <!-- You can add more property fields here -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+
+        }
+
+        </div>
+    </div>
+

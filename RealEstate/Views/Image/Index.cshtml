@@ -1,0 +1,94 @@
+﻿@* <!DOCTYPE html> *@
+@* <html lang="en"> *@
+@* <head> *@
+@*     <meta charset="UTF-8"> *@
+@*     <title>Image CRUD</title> *@
+@*     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+@* </head> *@
+@* <body> *@
+@*     <h2>Upload Image</h2> *@
+@*     <input type="file" id="imageFile"> *@
+@*     <button onclick="uploadImage()">Upload</button> *@
+
+@*     <h2>All Images</h2> *@
+@*     <div id="imageList"></div> *@
+
+@*     <script> *@
+@*         function uploadImage() { *@
+@*             var file = $('#imageFile')[0].files[0]; *@
+@*             var formData = new FormData(); *@
+@*             formData.append("file", file); *@
+
+@*             $.ajax({ *@
+@*                 url: '/Image/Upload', *@
+@*                 type: 'POST', *@
+@*                 data: formData, *@
+@*                 processData: false, *@
+@*                 contentType: false, *@
+@*                 success: function () { *@
+@*                     alert('Image uploaded'); *@
+@*                     loadImages(); *@
+@*                 } *@
+@*             }); *@
+@*         } *@
+
+@*         // function loadImages() { *@
+@*         //     $.get('/Image/GetAll', function (data) { *@
+@*         //         $('#imageList').empty(); *@
+@*         //         data.forEach(img => { *@
+@*         //             $('#imageList').append(` *@
+@*         //                 <div style="margin-bottom: 20px;"> *@
+@*         //                     <p>ID: ${img.id}</p> *@
+@*         //                     <img src="/Images/${img.fileName}" width="150" /> *@
+@*         //                     <br/> *@
+@*         //                     <input type="file" id="edit-${img.id}" /> *@
+@*         //                     <button onclick="editImage(${img.id})">Edit</button> *@
+@*         //                     <button onclick="deleteImage(${img.id})">Delete</button> *@
+@*         //                     <button onclick="downloadImage(${img.id})">Download</button> *@
+@*         //                     <hr/> *@
+@*         //                 </div> *@
+@*         //             `); *@
+@*         //         }); *@
+@*         //     }); *@
+@*         // } *@
+
+@*         // function deleteImage(id) { *@
+@*         //     $.ajax({ *@
+@*         //         url: '/api/image/' + id, *@
+@*         //         type: 'DELETE', *@
+@*         //         success: function () { *@
+@*         //             alert('Image deleted'); *@
+@*         //             loadImages(); *@
+@*         //         } *@
+@*         //     }); *@
+@*         // } *@
+
+@*         // function editImage(id) { *@
+@*         //     var file = $(`#edit-${id}`)[0].files[0]; *@
+@*         //     var formData = new FormData(); *@
+@*         //     formData.append("file", file); *@
+
+@*         //     $.ajax({ *@
+@*         //         url: '/api/image/edit/' + id, *@
+@*         //         type: 'POST', *@
+@*         //         data: formData, *@
+@*         //         processData: false, *@
+@*         //         contentType: false, *@
+@*         //         success: function () { *@
+@*         //             alert('Image updated'); *@
+@*         //             loadImages(); *@
+@*         //         } *@
+@*         //     }); *@
+@*         // } *@
+
+@*         // function downloadImage(id) { *@
+@*         //     window.location = '/api/image/download/' + id; *@
+@*         // } *@
+
+@*         // Load images on page load *@
+@*         // $(document).ready(function () { *@
+@*         //     loadImages(); *@
+@*         // }); *@
+@*     </script> *@
+@* </body> *@
+@* </html> *@

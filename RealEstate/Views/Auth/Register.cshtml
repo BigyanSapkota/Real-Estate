@@ -1,0 +1,100 @@
+﻿@model Entity.ViewModel.RegisterVM
+
+
+<section class="text-center">
+  
+    <div class="p-5 bg-image" style="
+        background-image: url('https://mdbootstrap.com/img/new/textures/full/171.jpg');
+        height: 300px;
+        "></div>
+   
+
+    <div class="card mx-4 mx-md-5 shadow-5-strong bg-body-tertiary" style="
+        margin-top: -100px;
+        backdrop-filter: blur(30px);
+        ">
+        <div class="card-body py-5 px-md-5">
+
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-5">Sign up now</h2>
+
+
+
+                    <form asp-controller="Auth" asp-action="Register" method="post">
+                       
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input asp-for="FirstName" class="form-control" />
+                                    <label asp-for="FirstName" class="form-label">First Name</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input asp-for="LastName" class="form-control"/>
+                                    <label asp-for="LastName" class="form-label">Last Name</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+							<input asp-for="Email" class="form-control" />
+							<label asp-for="Email" class="form-label">Email address</label>
+                        </div>
+
+                        <div class="row">
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input asp-for="Password" class="form-control" type="password" />
+                                <label asp-for="Password" class="form-label">Password</label>
+                            </div>
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                            </div>
+                         </div>
+
+                        @* <!-- Checkbox --> *@
+                        @* <div class="form-check d-flex justify-content-center mb-4"> *@
+                        @*     <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked /> *@
+                        @*     <label class="form-check-label" for="form2Example33"> *@
+                        @*         Subscribe to our newsletter *@
+                        @*     </label> *@
+                        @* </div> *@
+
+                      
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                            Sign up
+                        </button>
+
+                        <div class="text-center">
+                            <p>or sign up with:</p>
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                                <i class="bi bi-facebook"></i>
+                            </button>
+
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                                <i class="bi bi-google"></i>
+                            </button>
+
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                                <i class="bi bi-twitter-x"></i>
+                            </button>
+
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                                <i class="bi bi-instagram"></i>
+                            </button>
+
+
+                        </div>
+                    </form>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,367 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Name</label><br />
+                        <input type="text" class="form-control txtFilterName" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>Type</label><br />
+                        <input type="text" class="form-control txtFilterType" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>Price</label><br />
+                        <input type="text" class="form-control txtFilterPrice" />
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button type="button" class="btn btn-primary btnSearch">
+                            Search
+                        </button>
+                        <button type="button" class="btn btn-success btnNew">
+                            Add New Property
+                        </button>
+                    </div>
+                </div>
+  
+            </div>
+        </div>
+     
+        <div class="col-md-12 mt-2">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped table-hover dtTable">
+                        <thead>
+                            <tr>
+                               <th>Property Name</th> 
+                               <th>Location</th> 
+                               <th>Price</th> 
+                               <th>Type</th> 
+                               <th>Actions</th> 
+                            </tr>
+                        </thead>
+                        <tbody class="data-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                       @* Model to Add New property *@
+    <div class="modal fade" id="mdlNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Manage Property</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+
+                                <div class="col-md-11 ms-2">
+                                    <label for="propertyName" class="form-label">Property Name</label> 
+                                    <input type="text" class="form-control propertyName" required> 
+                                 </div> 
+
+                                 <div class="col-md-11 ms-2"> 
+                                  <label for="location" class="form-label">Location</label> 
+                                 <input type="text" class="form-control propertyLocation" required> 
+                                 </div> 
+
+                                 <div class="col-md-11 ms-2"> 
+                                   <label for="price" class="form-label">Price</label> 
+                                   <input type="number" class="form-control propertyPrice" required> 
+                                 </div> 
+
+                                 <div class="col-md-11 ms-2 mb-2"> 
+                                    <label for="type" class="form-label">Type</label> 
+                                    <select id="type" class="form-select ddlType" required> 
+                                        <option selected disabled>Choose...</option> 
+                                        <option>House Rent</option> 
+                                        <option>House Sell</option> 
+                                        <option>Apartment Rent</option> 
+                                        <option>Apartment Sell</option> 
+                                        <option>Land Rent</option> 
+                                        <option>Land Sell</option> 
+                                        <option>Flat Rent</option> 
+                                        <option>Others</option>
+                                    </select> 
+                                </div> 
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row ms-2">
+                                        <div class="row col-md-11">
+                                            <label>Upload Image</label>
+                                            <input type="file" class="form-control fileupload" />
+                                            <input type="hidden" class="hdnUploadedFile" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 ms-2">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control propertyDescription" id="description" name="description" rows="4" required></textarea>
+                                    </div>
+
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="hdnId" value="0" />
+                    <button type="button" class="btn btn-secondary btnClose">Clear</button>
+                    <button type="button" class="btn btn-primary btnSave">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    @section LocalScript{
+    <script>
+
+          $(document).ready(function () {
+            loadData();
+           });
+
+           $(document).on('click','.btnSearch',function(){
+               loadData();
+           });
+
+           $(document).on('click', '.btnNew', function () {
+                  $('#mdlNew').modal('show');
+
+           });
+
+            $(document).on('click', '.btnClose', function () {
+            var ok = confirm('Are you sure to clear form?')
+            if (ok) {
+                clearForm();
+            }
+        })
+
+
+    $(document).on('click', '.btnSave', function () {
+            var obj ={
+                 propertyId : $('.hdnId').val() || 0,
+                 propertyName : $('.propertyName').val() ,
+                 propertyType : $('.ddlType').val(),
+                 propertyLocation : $('.propertyLocation').val(),
+                 propertyDescription : $('.propertyDescription').val(),
+                 propertyImage : $('.hdnUploadedFile').val(),
+                 propertyPrice : $('.propertyPrice').val(),
+            }
+
+                $.ajax({
+                        method : 'post',
+                        contentType : "application/json; charset=utf-8",
+                        url : '@Url.Action("Save", "Property")',
+                        data : JSON.stringify(obj),
+                        success: function (res) {
+                        if (res.success == true) {
+                            toastr["success"](res.message, "OK");
+                            clearForm();
+                            loadData();
+                                 $('#mdlNew').modal('hide');
+                        } else {
+                            toastr["error"](res.message, "ERROR")
+                        }
+                    },
+                    error: function (err) {
+                        debugger;
+                    },
+                    beforeSend: function () {
+                        $.blockUI();
+                    },
+                    complete: function () {
+                        $.unblockUI();
+                    }
+
+                })
+            
+     });
+
+
+
+
+                  $(document).on('click', '.btnDelete', function () {
+                        var id = $(this).data('id');
+                        var result= confirm('Are you sure to delete data?');
+                        if(result == true){
+                            $.ajax({
+                                method:'get',
+                                contentType:  "application/json; charset=utf-8",
+                                url:'@Url.Action("Delete", "Property")?id=' + id,
+                                beforeSend: function () { $.blockUI(); },
+                                complete: function () { $.unblockUI(); },
+                                error: function (err) { console.log(err); alert('Error Occured') },
+                                success: function (rsp) {
+                                    if (rsp.success) {
+                                        toastr["success"](rsp.message, "OK");
+                                        loadData();
+                                    } else {
+                                        toastr["error"](rsp.message, "ERROR");
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+
+
+
+                     $(document).on('click', '.btnEdit', function () {
+                        var id = $(this).data('id');
+
+                        $.ajax({
+                            method: 'get',
+                            contentType: "application/json; charset=utf-8",
+
+                            url: '@Url.Action("GetById", "Property")?id=' + id,
+                            
+                            success: function (res) {
+                                debugger;
+                                if (res.success == true) {
+                                    debugger;
+                                        $('.hdnId').val(res.data.propertyId);
+                                        $('.propertyName').val(res.data.propertyName);
+                                        $('.ddlType').val(res.data.propertyType);
+                                        $('.propertyLocation').val(res.data.propertyLocation);
+                                        $('.propertyDescription').val(res.data.propertyDescription);
+                                        $('.hdnUploadedFile').val(res.data.propertyImage);
+                                        $('.propertyPrice').val(res.data.propertyPrice);
+                                                    $('#mdlNew').modal('show');
+                                      
+                             }
+                             else
+                             {
+                                    toastr["error"](res.message, "ERROR")
+                             }
+                            },
+                            error: function (err) {
+                                debugger;
+                            },
+                            beforeSend: function () {
+                                $.blockUI();
+                            },
+                            complete: function () {
+                                $.unblockUI();
+                            }
+                        })
+
+                    });
+
+
+
+
+
+
+     
+        function loadData() {
+                 var obj = {
+
+                   propertyName : $('.txtFilterName').val() ,
+                   propertyType : $('.txtFilterType').val(),
+                   propertyPrice : $('.txtFilterPrice').val(),
+                    
+                 };
+                 debugger;
+                 $.ajax({
+                     method: 'post',
+                     contentType: "application/json; charset=utf-8",
+                     url: '@Url.Action("GetAll", "Property")',
+                     data: JSON.stringify(obj),
+                     success: function (res) {
+                         if (res.success) {
+                             debugger;
+                             var data = res.data;
+                             debugger;
+
+                             var xyz = '';
+                             $.each(data, function (i, x) {
+                                 xyz += '<tr>';
+
+                                 xyz += '<td>' + x.propertyName + '</td>';
+                                 xyz += '<td>' + x.propertyLocation + '</td>';
+                                 xyz += '<td>' + x.propertyPrice + '</td>';
+                                 xyz += '<td>' + x.propertyType + '</td>';
+                                 xyz += '<td><button type="button" class="btn btn-sm btn-secondary btnEdit me-1" data-id="' + x.propertyId + '" >Edit</button><button type="button" class="btn btn-sm btn-danger btnDelete" data-id="' + x.propertyId + '">Delete</button></td>';
+                                 xyz += '</tr>';
+                             });
+                             $('.data-body').html(xyz);
+                             
+
+                         }
+                     }
+                 })
+             }
+
+
+
+           function clearForm()
+            {
+                 $('.hdnId').val('') ;
+                 $('.propertyName').val('') ;
+                 $('.ddlType').val('');
+                 $('.propertyLocation').val('');
+                 $('.propertyDescription').val('');
+                 $('.hdnUploadedFile').val('');
+                 $('.propertyPrice').val('');
+
+            }
+
+
+
+
+    </script>
+
+            <script>
+
+         
+                  $(document).on('change', '.fileupload', function () {
+                    var file = this.files[0];
+                    if (!file) return;
+                    debugger;
+                    var formData = new FormData();
+                    formData.append('file', file);
+
+                    $.ajax({
+                      url: '/Image/Upload',
+                      type: 'POST',
+                      data: formData,
+                      cache: false,
+                      contentType: false,
+                      processData: false,
+                     dataType: 'json',
+             
+                      success: function (response) {
+                          debugger;
+                        console.log("Upload successful:", response);
+
+                        // store the returned URL (or filename) in the hidden field
+                        debugger;
+                        $(".hdnUploadedFile").val(response.fileId);
+                      },
+                      error: function (xhr) {
+                        console.error("Upload failed", xhr);
+                      }
+                    });
+                  });
+               
+            </script>
+
+}
