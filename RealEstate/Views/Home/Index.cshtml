@@ -1,32 +1,200 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@* @{ *@
+@*     ViewData["Title"] = "Home Page"; *@
+@* } *@
+
+@* <div class="text-center"> *@
+@*     <h1 class="display-4">Welcome</h1> *@
+@*     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+
+@*     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"> *@
+@*         <ul class="navbar-nav flex-grow-1"> *@
+
+@*             @if (User.IsInRole("Admin")) *@
+@*             { *@
+@*                 <li class="nav-item"> *@
+@*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+@*                 </li> *@
+@*             } *@
+@*             <li class="nav-item"> *@
+@*                 <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a> *@
+@*             </li> *@
+@*             <li class="nav-item"> *@
+@*                 <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Register">Register</a> *@
+@*             </li> *@
+@*             @if (User.IsInRole("Admin")) *@
+@*             { *@
+@*                 <li class="nav-item"> *@
+@*                     <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="Index">Property</a> *@
+@*             </li> *@
+@*             } *@
+@*             <li class="nav-item"> *@
+@*                 <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="allProperty">Explore All Property</a> *@
+@*             </li> *@
+@*         </ul> *@
+@*     </div> *@
+
+
+@* </div> *@
+
+
+
+
+
+
+@using Microsoft.AspNetCore.Authentication
+
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    ViewData["Title"] = "Home Page";
+    var userName = User.Identity.Name; // User's name (email or username)
+    var userRole = User.IsInRole("Admin") ? "Admin" : "User"; // Role-based greeting
+    var profileImage = "/images/default-profile.png"; // Default profile image
+                                                      // You can customize the profile image URL based on user data, e.g. if stored in DB
+}
 
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-        <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="Index">Property</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="allProperty">All Property</a>
-            </li>
-        </ul>
+<style>
+    .hero-section {
+    background: linear-gradient(135deg, lightblue 10%, #2575fc 100%);
+    color: white;
+    padding: 80px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    }
+
+    .nav-box {
+    margin-top: 40px;
+    }
+
+    .nav-card {
+    transition: transform 0.3s ease;
+    }
+
+    .nav-card:hover {
+    transform: scale(1.05);
+    }
+
+    .icon-lg {
+    font-size: 2rem;
+    margin-right: 10px;
+    }
+
+    .user-greeting {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    }
+
+    .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    }
+</style>
+
+<div class="container text-center">
+    <div class="hero-section">
+        <h1 class="display-4">Welcome to RealEstate Portal</h1>
+        <p class="lead mt-3">Your trusted platform for property listing and management.</p>
+
+        <!-- User Greeting -->
+        @if (!string.IsNullOrEmpty(userName))
+        {
+            <p class="user-greeting">
+                @* <img src="@profileImage" alt="Profile Image" class="profile-image" /> *@
+                Hello, @userName
+            </p>
+        }
+
     </div>
 
+    <div class="row nav-box justify-content-center">
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card nav-card shadow">
+                    <div class="card-body">
+                        <i class="bi bi-house-fill icon-lg text-primary"></i>
+                        <a class="stretched-link text-decoration-none" asp-controller="Home" asp-action="Index">
+                            <h5>Home</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
 
+        @if (!isAuthenticated)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card nav-card shadow">
+                    <div class="card-body">
+                        <i class="bi bi-box-arrow-in-right icon-lg text-success"></i>
+                        <a class="stretched-link text-decoration-none" asp-controller="Auth" asp-action="Login">
+                            <h5>Login</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        @if (isAuthenticated)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card nav-card shadow">
+                    <div class="card-body">
+                        <i class="bi bi-box-arrow-in-right icon-lg text-danger"></i>
+                        <a class="stretched-link text-decoration-none" asp-controller="Auth" asp-action="Logout">
+                            <h5>LogOut</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+
+        <div class="col-md-4 mb-3">
+            <div class="card nav-card shadow">
+                <div class="card-body">
+                    <i class="bi bi-person-plus-fill icon-lg text-warning"></i>
+                    <a class="stretched-link text-decoration-none" asp-controller="Auth" asp-action="Register">
+                        <h5>Register</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card nav-card shadow">
+                    <div class="card-body">
+                        <i class="bi bi-building-fill-gear icon-lg text-danger"></i>
+                        <a class="stretched-link text-decoration-none" asp-controller="Property" asp-action="Index">
+                            <h5>Manage Property</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="col-md-4 mb-3">
+            <div class="card nav-card shadow">
+                <div class="card-body">
+                    <i class="bi bi-globe2 icon-lg text-info"></i>
+                    <a class="stretched-link text-decoration-none" asp-controller="Property" asp-action="allProperty">
+                        <h5>Explore All Properties</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-

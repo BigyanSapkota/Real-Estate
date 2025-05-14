@@ -2,6 +2,7 @@
 using Entity.Common;
 using Entity.Model;
 using Entity.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 
@@ -94,7 +95,7 @@ namespace RealEstate.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public JsonResult Save([FromBody] PropertyVM vm)
         {

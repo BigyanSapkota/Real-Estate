@@ -1,9 +1,12 @@
-﻿using BAL.Implementation;
+﻿using System.Security.Claims;
+using BAL.Implementation;
 using BAL.Interface;
 using DAO;
 using DAO.Migrations;
 using Entity.Model;
 using Entity.ViewModel;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RealEstate.Controllers
@@ -34,6 +37,27 @@ namespace RealEstate.Controllers
         }
 
 
+        //[HttpPost]
+        //public async Task<ActionResult> Login(string email, string password)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var response = await _service.Authenticate(email, password);
+        //        if (response != null && response.Success && response.Data != null)
+        //        {
+        //            var user = response.Data;
+        //            HttpContext.Session.SetString("UserId", user.UserId.ToString());
+        //            HttpContext.Session.SetString("Role", user.Role);
+        //            HttpContext.Session.SetString("Email", user.Email);
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        ViewBag.Error = "Invalid email or password.";
+        //    }
+        //    return View();
+        //}
+
+
+
         [HttpPost]
         public async Task<ActionResult> Login(string email, string password)
         {
@@ -43,17 +67,47 @@ namespace RealEstate.Controllers
                 if (response != null && response.Success && response.Data != null)
                 {
                     var user = response.Data;
-                    HttpContext.Session.SetString("UserId", user.UserId.ToString());
-                    HttpContext.Session.SetString("Role", user.Role);
-                    HttpContext.Session.SetString("Email", user.Email);
-                    return RedirectToAction("Index", "Home");
+
+                    // Setup claims
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("UserId", user.UserId.ToString())
+            };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true
+                    };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties
+                    );
+                    var role = HttpContext.Session.GetString("Role");
+
+                   return RedirectToAction("Index", "Home");
+                    
+                
+                    
                 }
+
                 ViewBag.Error = "Invalid email or password.";
             }
             return View();
         }
 
 
+    
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Auth");
+        }
+        
 
 
 

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.Models;
 
@@ -13,6 +14,7 @@ namespace RealEstate.Controllers
             _logger = logger;
         }
 
+       
         public IActionResult Index()
         {
             return View();

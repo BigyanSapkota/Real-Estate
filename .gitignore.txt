@@ -1,0 +1,20 @@
+# Ignore system files
+System Volume Information/
+Thumbs.db
+*.DS_Store
+
+# Ignore build outputs
+bin/
+obj/
+*.log
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core specific
+wwwroot/lib/
+appsettings.Development.json
+.vs/

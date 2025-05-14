@@ -3,6 +3,8 @@ using BAL.Interface;
 using DAO;
 using DAO.Implementation;
 using DAO.Interface;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -14,6 +16,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
+
+
+
+
 
 
 builder.Services.AddHttpContextAccessor();  // Needed for HttpContext access
@@ -41,13 +47,26 @@ builder.Services.AddScoped<IImageRepo, ImageRepo>();
 
 
 
+// Configure authentication and authorization
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+    });
 
+builder.Services.AddAuthorization();
 
 
 
 
 
 var app = builder.Build();
+
+
+
+
 
 
 
@@ -65,6 +84,10 @@ app.UseStaticFiles();
 
 app.UseSession();
 app.UseRouting();
+
+
+
+
 
 app.UseAuthorization();
 

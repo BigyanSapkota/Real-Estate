@@ -43,7 +43,7 @@ namespace DAO.Migrations
 
                     b.HasKey("ImageId");
 
-                    b.ToTable("Image");
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("Entity.Model.Property", b =>
@@ -83,7 +83,7 @@ namespace DAO.Migrations
 
                     b.HasKey("PropertyId");
 
-                    b.ToTable("Property");
+                    b.ToTable("Property", (string)null);
                 });
 
             modelBuilder.Entity("Entity.Model.User", b =>
@@ -119,7 +119,7 @@ namespace DAO.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 #pragma warning restore 612, 618
         }
